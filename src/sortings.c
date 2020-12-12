@@ -34,7 +34,7 @@ void merge(strings_array_t strings, array_size_t stringAmount, comparator_func_t
     strings_array_t temp = malloc(sizeof(char*) * stringAmount);
     if (!temp)
     {
-        printf("[ERROR] Unable to allocate sufficient memory.");
+        printf("[ERROR] Unable to allocate sufficient memory.\n");
         return;
     }
     while (step < stringAmount)
