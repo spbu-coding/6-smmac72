@@ -123,6 +123,14 @@ int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
             LastError = ERR_PRINTING;
             return checkError();
         }
+        if (strcspn(strings[i], "\n") == strlen(strings[i]))
+        {
+            if (fputs("\n", file) == EOF)
+            {
+                LastError = ERR_PRINTING;
+                return checkError();
+            }
+        }
     }
     return 0;
 }
