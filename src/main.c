@@ -89,23 +89,22 @@ int parseParams(int argc, char** argv, array_size_t* stringAmount, comparator_fu
 
 int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
-    size_t i;
+    size_t i = 0;
     if (stringAmount == 0)
         return 0;
-    for (i = 0; i < stringAmount; i++)
+    while (!feof(file) && i < stringAmount)
     {
-        if (feof(file))
-            break;
-        if (!fgets(strings[i], MAX_INPUT_STRING_SIZE, file))
+        if (fgets(strings[i], MAX_INPUT_STRING_SIZE, file) == NULL)
         {
-            if (i < stringAmount)
-            {
-                LastError = ERR_STRING_AMOUNT;
-                return checkError();
-            }
             LastError = ERR_READING;
             return checkError();
         }
+        i++;
+    }
+    if (feof(file) && i != stringAmount)
+    {
+        LastError = ERR_STRING_AMOUNT;
+        return checkError();
     }
     return 0;
 }
