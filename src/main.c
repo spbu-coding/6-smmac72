@@ -98,14 +98,14 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
             break;
         if (!fgets(strings[i], MAX_INPUT_STRING_SIZE, file))
         {
+            if (i < stringAmount)
+            {
+                LastError = ERR_STRING_AMOUNT;
+                return checkError();
+            }
             LastError = ERR_READING;
             return checkError();
         }
-    }
-    if (i < stringAmount)
-    {
-        LastError = ERR_STRING_AMOUNT;
-        return checkError();
     }
     return 0;
 }
