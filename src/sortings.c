@@ -125,9 +125,7 @@ void radixCore(strings_array_t strings, array_size_t stringAmount, int position)
             bucket[0] = strings;
             top[0] = strings;
             for (i = 1; i <= UCHAR_MAX; i++)
-            {
                 top[i] = bucket[i] = bucket[i - 1] + count[i - 1];
-            }
 
             for (i = 0; i <= UCHAR_MAX; i++)
             {

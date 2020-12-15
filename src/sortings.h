@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #define MAX_INPUT_STRING_SIZE 1000
 
