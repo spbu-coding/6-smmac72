@@ -92,8 +92,10 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
     size_t i;
     if (stringAmount == 0)
         return 0;
-    for (i = 0; i < stringAmount && !feof(file); i++)
+    for (i = 0; i < stringAmount; i++)
     {
+        if (feof(file))
+            break;
         if (!fgets(strings[i], MAX_INPUT_STRING_SIZE, file))
         {
             LastError = ERR_READING;
@@ -161,7 +163,6 @@ int main(int argc, char** argv)
     inputFile = fopen(argv[2], "r");
     if (!inputFile)
     {
-        fclose(inputFile);
         LastError = ERR_OPEN_FILE;
         return checkError();
     }
@@ -198,12 +199,16 @@ int main(int argc, char** argv)
     }
     fclose(inputFile);
     if (stringSort(argv, stringAmount, strings, cmp) == -1)
+    {
+        for (size_t i = 0; i < stringAmount; i++)
+            free(strings[i]);
+        free(strings);
         return -1;
+    }
 
     outputFile = fopen(argv[3], "w");
     if (!outputFile)
     {
-        fclose(outputFile);
         LastError = ERR_OPEN_FILE;
         return checkError();
     }

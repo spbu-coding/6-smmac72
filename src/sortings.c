@@ -77,9 +77,9 @@ static int partition(strings_array_t strings, size_t left, size_t right, compara
     char* middle_string = strings[(left + right) / 2];
     while (left <= right)
     {
-        while(cmp(strings[left], middle_string) > 0)
+        while (cmp(strings[left], middle_string) > 0)
             left++;
-        while(cmp(middle_string, strings[right]) > 0)
+        while (cmp(middle_string, strings[right]) > 0)
             right--;
         if (left >= right)
             break;
@@ -105,42 +105,56 @@ void quick(strings_array_t strings, array_size_t stringAmount, comparator_func_t
     quickCore(strings, 0, stringAmount - 1, cmp);
 }
 
-void radixCore(char **strings, array_size_t stringAmount, int max_radix, comparator_func_t cmp)
+void radixCore(strings_array_t strings, array_size_t stringAmount, int position)
 {
-    for (int i = max_radix - 1; i >= 0; i--)
+    array_size_t count[UCHAR_MAX + 1], mode, i;
+    strings_array_t bucket[UCHAR_MAX + 1], top[UCHAR_MAX + 1];
+    while (stringAmount > 1)
     {
-        char *temp_array[stringAmount];
-        int count[128] = { 0 };
+        memset(count, 0, sizeof(array_size_t) * (UCHAR_MAX + 1));
+        for (i = 0; i < stringAmount; i++)
+            count[(int) strings[i][position]]++;
 
-        for (int j = 0; j < (int) stringAmount; j++)
-            count[(int) strings[j][i]]++;
+        mode = 1;
+        for (i = 2; i <= UCHAR_MAX; i++)
+            if(count[i] > count[mode])
+                mode = i;
 
-        for (int j = 1; j < 128; j++)
-            count[j] += count[j - 1];
-
-        for (int j = (int)stringAmount - 1; j >= 0; j--)
+        if (count[mode] < stringAmount)
         {
-            temp_array[count[(int) strings[j][i]] - 1] = strings[j];
-            count[(int) strings[j][i]]--;
+            bucket[0] = strings;
+            top[0] = strings;
+            for (i = 1; i <= UCHAR_MAX; i++)
+            {
+                top[i] = bucket[i] = bucket[i - 1] + count[i - 1];
+            }
+
+            for (i = 0; i <= UCHAR_MAX; i++)
+            {
+                while (top[i] < bucket[i] + count[i])
+                    if ((array_size_t) top[i][0][position] == i)
+                        top[i]++;
+                    else
+                        swap(top[i], top[(int) top[i][0][position]]++);
+            }
+
+            for (i = 1; i <= UCHAR_MAX; i++)
+                if (i != mode)
+                    radixCore(bucket[i], count[i], position + 1);
+
+            stringAmount = count[mode];
+            strings = bucket[mode];
+            position++;
         }
-        for (int j = (int)stringAmount - 1; j >= 0; j--)
-        {
-            if (i > 0 || cmp("A", "B") < 0)
-                strings[j] = temp_array[j];
-            else
-                strings[stringAmount - 1 - j] = temp_array[j];
-        }
+        else
+            position++;
     }
 }
 
 void radix(strings_array_t strings, array_size_t stringAmount, comparator_func_t cmp)
 {
-    int max_radix = 0;
-    for (int i = 0 ; i < (int)stringAmount; i++)
-    {
-        if (max_radix < (int)strlen(strings[i]))
-            max_radix = (int)strlen(strings[i]);
-    }
-
-    radixCore(strings, stringAmount, max_radix, cmp);
+    radixCore(strings, stringAmount, 0);
+    if (cmp("1", "2") < 0)
+        for (array_size_t i = 0; i < stringAmount / 2; i++)
+            swap(&strings[i], &strings[stringAmount - i - 1]);
 }
