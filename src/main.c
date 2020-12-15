@@ -13,23 +13,23 @@ int checkError()
             return -1;
 
         case ERR_ALLOC:
-            printf("[ERROR] Can't allocate sufficient memory.\n");
+            printf("[ERROR] Can't allocate sufficient memory!\n");
             return -1;
 
         case ERR_PARAM_AMOUNT:
-            printf("[ERROR] Only five parameters are accepted.\n");
+            printf("[ERROR] Only five parameters are accepted!\n");
             return -1;
 
         case ERR_PRINTING:
-            printf("[ERROR] Can't print to a file.\n");
+            printf("[ERROR] Can't print to a file!\n");
             return -1;
 
         case ERR_READING:
-            printf("[ERROR] Can't read from a file.\n");
+            printf("[ERROR] Can't read from a file!\n");
             return -1;
 
         case ERR_STRING_AMOUNT:
-            printf("[ERROR] File string amount is less than a parametered one.\n");
+            printf("[ERROR] File string amount is less than a parametered one!\n");
             return -1;
 
         case ERR_UNSUPPORTED_SORTING:
@@ -37,11 +37,11 @@ int checkError()
             return -1;
 
         case ERR_UNSUPPORTED_COMPARATOR:
-            printf("[ERROR] Unsupported comparator settings! Try 'asc' or 'des'\n");
+            printf("[ERROR] Unsupported comparator settings! Try 'asc' or 'des'!\n");
             return -1;
 
         case ERR_SECOND_PARAM:
-            printf("[ERROR] String amount should be a positive number.\n");
+            printf("[ERROR] String amount should be a positive number!\n");
             return -1;
 
         default:
@@ -112,8 +112,6 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 
 int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
-    if (stringAmount == 0)
-        fputs("\n", file);
     for (size_t i = 0; i < stringAmount; i++)
     {
         if (fputs(strings[i], file) == EOF)
@@ -122,6 +120,7 @@ int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
             return checkError();
         }
     }
+    fputs("\n", file);
     return 0;
 }
 
