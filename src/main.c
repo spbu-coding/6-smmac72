@@ -87,21 +87,12 @@ int parseParams(int argc, char** argv, array_size_t* stringAmount, comparator_fu
     return 0;
 }
 
-int getLines(FILE* file)
-{
-    char c;
-    int count = 0;
-    for (c = getc(file); c != EOF; c = getc(file))
-        if (c == '\n')
-            count++;
-    return count;
-}
 int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
     size_t i = 0;
     if (stringAmount == 0)
         return 0;
-    while (!feof(file))
+    while (!feof(file) && i < stringAmount)
     {
         if (fgets(strings[i], MAX_INPUT_STRING_SIZE, file) == NULL)
             break;
@@ -156,23 +147,14 @@ int stringSort(char** argv, array_size_t stringAmount, strings_array_t strings, 
 
 int main(int argc, char** argv)
 {
-    array_size_t outLines;
+    array_size_t stringAmount;
     comparator_func_t cmp = NULL;
     FILE* inputFile;
     FILE* outputFile;
 
-    if (parseParams(argc, argv, &outLines, &cmp) == -1)
+    if (parseParams(argc, argv, &stringAmount, &cmp) == -1)
         return -1;
 
-    inputFile = fopen(argv[2], "r");
-    if (!inputFile)
-    {
-        LastError = ERR_OPEN_FILE;
-        return checkError();
-    }
-
-    array_size_t stringAmount = getLines(inputFile); // ахахахахах костыль
-    fclose(inputFile); // я не знаю что с этим делать, но я не сплю вторую ночь
     inputFile = fopen(argv[2], "r");
     if (!inputFile)
     {
@@ -226,7 +208,7 @@ int main(int argc, char** argv)
         return checkError();
     }
 
-    if (writeFile(outputFile, outLines, strings) == -1)
+    if (writeFile(outputFile, stringAmount, strings) == -1) //!!!
     {
         for (size_t i = 0; i < stringAmount; i++)
             free(strings[i]);
