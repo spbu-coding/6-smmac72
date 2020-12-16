@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 
-#define  MAX_INPUT_STRING_SIZE 1000
+#define MAX_INPUT_STRING_SIZE 1000
 
 typedef int (*comparator_func_t)(const char*, const char*);
 typedef char** strings_array_t;
