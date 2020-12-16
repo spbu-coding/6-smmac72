@@ -111,11 +111,6 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 
 int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
-    if (stringAmount == 0)
-    {
-        fputs("\n", file);
-        return 0;
-    }
     for (size_t i = 0; i < stringAmount; i++)
     {
         if (fputs(strings[i], file) == EOF)
@@ -123,15 +118,11 @@ int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
             LastError = ERR_PRINTING;
             return checkError();
         }
-        if (strcspn(strings[i], "\n") == strlen(strings[i]))
-        {
-            if (fputs("\n", file) == EOF)
-            {
-                LastError = ERR_PRINTING;
-                return checkError();
-            }
-        }
     }
+    int ch = 0;
+    if (strchr (strings[stringAmount-1],'\n') != 0) ch = 1;
+    if (!ch)
+        fputs("\n", file);
     return 0;
 }
 
