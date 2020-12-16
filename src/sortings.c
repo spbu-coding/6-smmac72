@@ -12,7 +12,7 @@ void bubble(strings_array_t strings, array_size_t stringAmount, comparator_func_
 {
     for (int i = 0 ; i < (int)stringAmount; i++)
         for (int j = 0 ; j < (int)stringAmount - 1 ; j++)
-            if (cmp(strings[j], strings[j+1]) > 0)
+            if (cmp(strings[j], strings[j+1]) < 0)
                 swap(&strings[j], &strings[j+1]);
 }
 
