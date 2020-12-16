@@ -104,7 +104,7 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
     }
 
     if (!strchr(strings[stringAmount-1],'\n'))
-        strcat_s(strings[stringAmount-1], MAX_INPUT_STRING_SIZE, "\n");
+        strcat(strings[stringAmount-1], "\n"); // strcat_s не дает грейдинг систем закинуть, не знаю почему
     return 0;
 }
 
