@@ -29,7 +29,7 @@ int checkError()
             return -1;
 
         case ERR_STRING_AMOUNT:
-            printf("[ERROR] File string amount is less than a parametered one!\n");
+            printf("[ERROR] File string amount is not equal to a parametered one!\n");
             return -1;
 
         case ERR_UNSUPPORTED_SORTING:
@@ -101,7 +101,7 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
         }
         i++;
     }
-    if (feof(file) && i != stringAmount)
+    if (i != stringAmount || !feof(file))
     {
         LastError = ERR_STRING_AMOUNT;
         return checkError();
@@ -111,6 +111,8 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 
 int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
+    int ch = 0;
+    if (strchr(strings[stringAmount-1],'\n')) ch = 1;
     for (size_t i = 0; i < stringAmount; i++)
     {
         if (fputs(strings[i], file) == EOF)
@@ -119,8 +121,6 @@ int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
             return checkError();
         }
     }
-    int ch = 0;
-    if (strchr (strings[stringAmount-1],'\n') != 0) ch = 1;
     if (!ch)
         fputs("\n", file);
     return 0;
