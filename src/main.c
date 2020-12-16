@@ -94,7 +94,7 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
         return 0;
     for (; i < stringAmount && !feof(file); i++)
     {
-        if (fgets(strings[i], MAX_INPUT_STRING_SIZE, file) == NULL)
+        if (fgets(strings[i], MAX_INPUT_STRING_SIZE + 3, file) == NULL)
             break;
     }
     if (i != stringAmount)
@@ -110,6 +110,11 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 
 int writeFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
 {
+    if (stringAmount == 0)
+    {
+        fputs("\n", file);
+        return 0;
+    }
     for (size_t i = 0; i < stringAmount; i++)
     {
         if (fputs(strings[i], file) == EOF)
