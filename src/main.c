@@ -103,8 +103,8 @@ int readFile(FILE* file, array_size_t stringAmount, strings_array_t strings)
         return checkError();
     }
 
-    if (strchr(strings[stringAmount-1],'\n'))
-        fputs("\n", file);
+    if (!strchr(strings[stringAmount-1],'\n'))
+        strcat_s(strings[stringAmount-1], MAX_INPUT_STRING_SIZE, "\n");
     return 0;
 }
 
