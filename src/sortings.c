@@ -50,7 +50,7 @@ void merge(strings_array_t strings, array_size_t stringAmount, comparator_func_t
             array_size_t i1 = left, i2 = mid;
             while (i1 < mid && i2 < right)
             {
-                if (cmp(strings[i1], strings[i2]) < 0)
+                if (cmp(strings[i1], strings[i2]) > 0)
                     temp[index++] = strings[i1++];
                 else
                     temp[index++] = strings[i2++];
